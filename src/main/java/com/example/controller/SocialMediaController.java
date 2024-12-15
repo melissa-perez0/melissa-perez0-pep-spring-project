@@ -24,7 +24,7 @@ public class SocialMediaController {
     public SocialMediaController(AccountService accountService) {
         this.accountService =  accountService;
     }
-    
+      
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Account account) {
         boolean isValidUsernamePassword = validateUsernamePassword(account.getUsername(), account.getPassword());
