@@ -2,6 +2,7 @@ package com.example.controller;
 
 import java.lang.annotation.Repeatable;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,23 +23,29 @@ public class SocialMediaController {
     AccountService accountService;
     MessageService messageService;
 
-    public SocialMediaController() {
-        accountService = new AccountService();
-        messageService = new MessageService();
+    @Autowired
+    public SocialMediaController(AccountService accountService, MessageService messageService) {
+        this.accountService =  accountService;
+        this.messageService = messageService;
     }
-
+    
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Account account) {
-        Account registerAccount = accountService.registerAccount(account);
+        // Check first to see if username and password are valid
         boolean isValidUsernamePassword = validateUsernamePassword(account.getUsername(), account.getPassword());
-        
-        if(registerAccount != null) {
-            return ResponseEntity.status(200).body(registerAccount);
-        } else if(accountService.searchUsername(account) != null) {
-            return ResponseEntity.status(400).body("Username already already exists.")
+
+        if (isValidUsernamePassword) {
+            Account usernameAccount = accountService.searchUsername(account.getUsername());
+
+            if(usernameAccount != null) {
+                return ResponseEntity.status(409).body("Username already already exists.")
+            }
+            else {
+                accountService.createAccount(account);
+                return ResponseEntity.status(200).body(account); 
+            }
         }
         return ResponseEntity.status(400).body("Client error.");
-
     }
 
     private boolean validateUsernamePassword(String username, String password) {
