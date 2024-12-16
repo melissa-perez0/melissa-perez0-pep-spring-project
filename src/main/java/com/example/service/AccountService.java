@@ -23,4 +23,9 @@ public class AccountService {
         Account searchedAccount = accountRepository.findByUsername(username);
         return searchedAccount != null ? searchedAccount : null; 
     }
+
+    public Account searchUsernameAndPassword(String username, String password) {
+        Account searchedAccount = accountRepository.findByUsernameAndPassword(username, password);
+        return searchedAccount != null ? searchedAccount : null; 
+    }
 }

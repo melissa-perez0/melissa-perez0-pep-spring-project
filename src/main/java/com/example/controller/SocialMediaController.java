@@ -38,12 +38,12 @@ public class SocialMediaController {
             else {
                 Account registeredAccount = accountService.createAccount(account);
                 if (registeredAccount == null) {
-                    return ResponseEntity.status(400).body("Client error.");
+                    return ResponseEntity.status(400).body("");
                 }
                 return ResponseEntity.status(200).body(account); 
             }
         }
-        return ResponseEntity.status(400).body("Client error.");
+        return ResponseEntity.status(400).body("");
     }
 
     private boolean validateUsernamePassword(String username, String password) {
@@ -55,5 +55,17 @@ public class SocialMediaController {
         }
         return true;
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Account account) {
+
+        Account loginAccount = accountService.searchUsernameAndPassword(account.getUsername(), account.getPassword());
+
+        if(loginAccount != null) {
+                return ResponseEntity.status(200).body(loginAccount);
+        }
+        return ResponseEntity.status(401).body("");
+    }
+
 
 }
