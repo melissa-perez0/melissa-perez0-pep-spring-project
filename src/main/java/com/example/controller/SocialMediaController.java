@@ -102,4 +102,13 @@ public class SocialMediaController {
         }
         return ResponseEntity.status(200).body("");
     }
+
+    @DeleteMapping("/messages/{id}")
+    public ResponseEntity<?> deleteMessage(@PathVariable Integer id) {
+        Integer numberOfRowsAffected = messageService.deleteMessage(id);
+        if(numberOfRowsAffected != null) {
+            return ResponseEntity.status(200).body(numberOfRowsAffected);
+        }
+        return ResponseEntity.status(200).body("");
+    }
 }

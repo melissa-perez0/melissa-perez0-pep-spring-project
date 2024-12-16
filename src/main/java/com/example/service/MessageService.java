@@ -27,4 +27,13 @@ public class MessageService {
     public Message getMessage(int id) {
         return messageRepository.findByMessageId(id);
     }
+
+    public Integer deleteMessage(int id){
+        Message message = messageRepository.findById(id).orElse(null);
+        if(message != null){
+            messageRepository.deleteById(id);
+            return 1;
+        }
+        return null;
+    }
 }
