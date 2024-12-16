@@ -11,6 +11,8 @@ import com.example.entity.Message;
 import com.example.service.MessageService;
 import com.example.service.AccountService;
 
+import java.util.List;
+
 
 @RestController
 public class SocialMediaController {
@@ -84,5 +86,11 @@ public class SocialMediaController {
             return false;
         }
         return true;
+    }
+
+    @GetMapping("/messages")
+    public ResponseEntity<?> getAllMessages() {
+        List<Message> allMessages = messageService.getAllMessages();
+        return ResponseEntity.status(200).body(allMessages);
     }
 }
