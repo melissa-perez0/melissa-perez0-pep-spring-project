@@ -94,21 +94,39 @@ public class SocialMediaController {
         return ResponseEntity.status(200).body(allMessages);
     }
 
-    @GetMapping("/messages/{id}")
-    public ResponseEntity<?> getMessage(@PathVariable Integer id) {
-        Message gotMessage = messageService.getMessage(id);
+    @GetMapping("/messages/{message_id}")
+    public ResponseEntity<?> getMessage(@PathVariable Integer message_id) {
+        Message gotMessage = messageService.getMessage(message_id);
         if(gotMessage != null) {
             return ResponseEntity.status(200).body(gotMessage);
         }
         return ResponseEntity.status(200).body("");
     }
 
-    @DeleteMapping("/messages/{id}")
-    public ResponseEntity<?> deleteMessage(@PathVariable Integer id) {
-        Integer numberOfRowsAffected = messageService.deleteMessage(id);
+    @DeleteMapping("/messages/{message_id}")
+    public ResponseEntity<?> deleteMessage(@PathVariable Integer message_id) {
+        Integer numberOfRowsAffected = messageService.deleteMessage(message_id);
         if(numberOfRowsAffected != null) {
             return ResponseEntity.status(200).body(numberOfRowsAffected);
         }
         return ResponseEntity.status(200).body("");
     }
+
+    @PatchMapping("/messages/{message_id}")
+    public ResponseEntity<?> updateMessage(@RequestBody Message newMessage, int message_id){
+        Message getMessage = messageService.getMessage(message_id);
+
+        if(getMessage != null) {
+            boolean isValidMessageText = validateMessage(getMessage.getMessageText());
+            if(isValidMessageText) {
+                Integer numberOfRowsAffected = messageService.updateMessage(message_id, get);
+                if(numberOfRowsAffected != null) {
+                    return ResponseEntity.status(200).body(numberOfRowsAffected);
+                }
+            }
+        }
+        return ResponseEntity.status(400).body("");
+    }
+
+
 }

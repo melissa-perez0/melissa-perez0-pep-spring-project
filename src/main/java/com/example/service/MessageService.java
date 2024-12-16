@@ -36,4 +36,20 @@ public class MessageService {
         }
         return null;
     }
+
+    public Integer updateMessage(int id){
+        Message message = messageRepository.findById(id).orElse(null);
+        if(message != null){
+            message.setMessageText(replacement.getName());
+
+            return 1;
+        }
+
+        if(optionalGrocery.isPresent()){
+            Grocery grocery = optionalGrocery.get();
+            grocery.setName(replacement.getName());
+            groceryRepository.save(grocery);
+        }
+        return null;
+    }
 }
