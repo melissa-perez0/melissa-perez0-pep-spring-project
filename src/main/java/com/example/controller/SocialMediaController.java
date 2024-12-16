@@ -18,8 +18,9 @@ public class SocialMediaController {
     MessageService messageService;
 
     @Autowired
-    public SocialMediaController(AccountService accountService) {
+    public SocialMediaController(AccountService accountService, MessageService messageService) {
         this.accountService =  accountService;
+        this.messageService = messageService;
     }
       
     @PostMapping("/register")
@@ -65,20 +66,21 @@ public class SocialMediaController {
     @PostMapping("/messages")
     public ResponseEntity<?> createMessage(@RequestBody Message message) {
         boolean isValidMessageText = validateMessage(message.getMessageText());
-        if (isValidMessageText) {
+        Account validAccount = accountService.searchByAccountId(message.getPostedBy());
+        if (isValidMessageText && validAccount != null) {
             Message newMessage = messageService.createMessage(message);
-            return ResponseEntity.status(200).body(newMessage);
+            if (newMessage != null) {
+                return ResponseEntity.status(200).body(newMessage);
+            }
         }
         return ResponseEntity.status(400).body("");
     }
 
     private boolean validateMessage(String text) {
         final int messageMaxLength = 255;
-
         if (text == null || text.trim().isEmpty()) {
             return false;
         } else if (text.length() > messageMaxLength) {
-
             return false;
         }
         return true;
