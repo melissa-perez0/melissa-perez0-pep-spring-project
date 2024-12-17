@@ -37,18 +37,12 @@ public class MessageService {
         return null;
     }
 
-    public Integer updateMessage(int id){
-        Message message = messageRepository.findById(id).orElse(null);
-        if(message != null){
-            message.setMessageText(replacement.getName());
-
+    public Integer updateMessage(int id, String message){
+        Message searchMessage = messageRepository.findById(id).orElse(null);
+        if(searchMessage != null){
+            searchMessage.setMessageText(message);
+            messageRepository.save(searchMessage);
             return 1;
-        }
-
-        if(optionalGrocery.isPresent()){
-            Grocery grocery = optionalGrocery.get();
-            grocery.setName(replacement.getName());
-            groceryRepository.save(grocery);
         }
         return null;
     }

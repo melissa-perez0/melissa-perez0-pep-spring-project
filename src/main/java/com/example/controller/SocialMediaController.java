@@ -113,13 +113,12 @@ public class SocialMediaController {
     }
 
     @PatchMapping("/messages/{message_id}")
-    public ResponseEntity<?> updateMessage(@RequestBody Message newMessage, int message_id){
+    public ResponseEntity<?> updateMessage(@RequestBody Message newMessage, @PathVariable Integer message_id){
         Message getMessage = messageService.getMessage(message_id);
-
         if(getMessage != null) {
-            boolean isValidMessageText = validateMessage(getMessage.getMessageText());
+            boolean isValidMessageText = validateMessage(newMessage.getMessageText());
             if(isValidMessageText) {
-                Integer numberOfRowsAffected = messageService.updateMessage(message_id, get);
+                Integer numberOfRowsAffected = messageService.updateMessage(message_id, newMessage.getMessageText());
                 if(numberOfRowsAffected != null) {
                     return ResponseEntity.status(200).body(numberOfRowsAffected);
                 }
