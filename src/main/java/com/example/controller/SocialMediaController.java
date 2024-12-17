@@ -127,5 +127,13 @@ public class SocialMediaController {
         return ResponseEntity.status(400).body("");
     }
 
+    @GetMapping("/accounts/{account_id}/messages")
+    public ResponseEntity<?> getMessagesFromAccount(@PathVariable Integer account_id) {
+        List<Message> foundMessages = messageService.getAllUserMessages(account_id);
+        if(foundMessages != null){
+            return ResponseEntity.status(200).body(foundMessages);
+        }
+        return ResponseEntity.status(200).body("");
+    }
 
 }

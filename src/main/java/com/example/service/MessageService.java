@@ -28,6 +28,10 @@ public class MessageService {
         return messageRepository.findByMessageId(id);
     }
 
+    public List<Message> getAllUserMessages(int id) {
+        return messageRepository.findByPostedBy(id);
+    }
+
     public Integer deleteMessage(int id){
         Message message = messageRepository.findById(id).orElse(null);
         if(message != null){
